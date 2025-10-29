@@ -8,6 +8,7 @@ It enables students and teachers to interact seamlessly through courses, authent
 ## 🧭 Table of Contents
 
 - [Overview](#overview)  
+- [Tech Stack](#tech-stack)  
 - [Features](#features)  
 - [Project Structure](#project-structure)  
 - [Installation](#installation)  
@@ -15,7 +16,6 @@ It enables students and teachers to interact seamlessly through courses, authent
 - [Frontend Setup](#frontend-setup)  
 - [Environment Variables](#environment-variables)  
 - [Demo Credentials](#demo-credentials)  
-- [Tech Stack](#tech-stack)  
 - [Deployment](#deployment)
 
 ---
@@ -25,6 +25,26 @@ It enables students and teachers to interact seamlessly through courses, authent
 EduNexus is designed to simplify learning and course management.  
 Teachers can create and manage courses, while students can view, enroll, and interact.  
 Authentication, file uploads, and course data are securely handled using **JWT**, **Cloudinary**, and **MongoDB**.
+
+---
+
+## 🧩 Tech Stack
+
+### 🖥️ Frontend
+- React (Vite)
+- TailwindCSS
+- Axios
+- React Router DOM
+- Lucide React (icons)
+
+### ⚙️ Backend
+- Node.js
+- Express.js
+- MongoDB & Mongoose
+- Multer (File Uploads)
+- Cloudinary
+- bcrypt
+- JWT Authentication
 
 ---
 
@@ -130,29 +150,11 @@ You can use the following test accounts to explore EduNexus:
 
 | Role | Email | Password |
 |------|--------|-----------|
-| 🧑‍🎓 **Student** | student01@edunexus.com | student123 |
+| 🧑‍🎓 **Student** | stud01@edunexus.com | stud123 |
 | 👨‍🏫 **Teacher** | teach01@edunexus.com | teach123 |
-| 🧑‍💼 **Admin** | admin01@edunexus.com | admin123 |
+| 🧑‍💼 **Admin** | admin02@edunexus.com | ad123 |
 
----
 
-## 🧩 Tech Stack
-
-### 🖥️ Frontend
-- React (Vite)
-- TailwindCSS
-- Axios
-- React Router DOM
-- Lucide React (icons)
-
-### ⚙️ Backend
-- Node.js
-- Express.js
-- MongoDB & Mongoose
-- Multer (File Uploads)
-- Cloudinary
-- bcrypt
-- JWT Authentication
 
 ---
 
