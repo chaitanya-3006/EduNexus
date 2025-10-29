@@ -327,7 +327,7 @@ const handleSendMessage = async (e) => {
 
               {/* Assignments Tab */}
               <TabsContent value="assignments">
-  {/* ✅ Add Assignment Button (for instructors only) */}
+  {/*  Add Assignment Button (for instructors only) */}
   {isInstructor && (
     <button
       data-testid="add-assignment-btn"
@@ -339,7 +339,7 @@ const handleSendMessage = async (e) => {
     </button>
   )}
 
-  {/* ✅ Assignments List */}
+  {/*  Assignments List */}
   <div className="space-y-4" data-testid="assignments-list">
     {assignments.map((assignment) => (
       <div
@@ -352,7 +352,7 @@ const handleSendMessage = async (e) => {
           <p className="text-gray-600 mb-2">{assignment.description}</p>
           <p className="text-sm text-gray-500 mb-3">Due: {assignment.due_date}</p>
 
-          {/* ✅ Student Submit Button */}
+          {/*  Student Submit Button */}
 {user.role === 'student' && (
   <button
     onClick={() => {
@@ -372,7 +372,7 @@ const handleSendMessage = async (e) => {
 
         </div>
 
-        {/* ✅ Instructor Delete Button */}
+        {/*  Instructor Delete Button */}
         {isInstructor && (
           <button
             data-testid={`delete-assignment-btn-${assignment.id}`}
