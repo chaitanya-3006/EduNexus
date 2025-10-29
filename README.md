@@ -1,182 +1,176 @@
-🎓 EduNexus — Full Stack Learning Platform
+# 🎓 EduNexus
 
-EduNexus is a full-stack web application built using React (Vite) for the frontend and Node.js + Express for the backend, with MongoDB as the database.
-It provides features like user authentication, course management, and assignment submissions for teachers and students.
+EduNexus is a modern **Learning Management System (LMS)** built using **React (Vite)**, **Node.js**, **Express**, and **MongoDB**.  
+It enables students and teachers to interact seamlessly through courses, authentication, and cloud file management.
 
-🚀 Tech Stack
-Frontend
+---
 
-⚛️ React (Vite)
+## 🧭 Table of Contents
 
-💨 TailwindCSS
+- [Overview](#overview)  
+- [Features](#features)  
+- [Project Structure](#project-structure)  
+- [Installation](#installation)  
+- [Backend Setup](#backend-setup)  
+- [Frontend Setup](#frontend-setup)  
+- [Environment Variables](#environment-variables)  
+- [Demo Credentials](#demo-credentials)  
+- [Tech Stack](#tech-stack)  
+- [Deployment](#deployment)
 
-🎨 Radix UI / Lucide Icons
+---
 
-🔄 Axios for API communication
+## 📖 Overview
 
-🌈 React Router DOM for navigation
+EduNexus is designed to simplify learning and course management.  
+Teachers can create and manage courses, while students can view, enroll, and interact.  
+Authentication, file uploads, and course data are securely handled using **JWT**, **Cloudinary**, and **MongoDB**.
 
-Backend
+---
 
-🧠 Node.js with Express.js
+## ⚙️ Features
 
-🔒 JWT Authentication
+✅ Authentication (JWT-based)  
+✅ Course management (Create, update, delete, view)  
+✅ Role-based access (Student, Teacher, Admin)  
+✅ Image & file uploads using **Multer + Cloudinary**  
+✅ Responsive UI built with **React + TailwindCSS**  
+✅ Deployed on **Render (Backend)** and **Vercel (Frontend)**
 
-🧩 Mongoose for MongoDB ORM
+---
 
-☁️ Cloudinary for file uploads
+## 🗂️ Project Structure
 
-🪣 Multer for handling uploads
-
-🗂️ Project Structure
+```bash
 EduNexus/
-│
-├── client/                # Frontend (React + Vite)
+├── client/                           # Frontend (React + Vite)
 │   ├── public/
-│   │   ├── _redirects     # For routing on Vercel
-│   ├── src/               # React source files
-│   ├── .env               # Frontend environment variables
+│   │   └── _redirects                # For routing on Vercel
+│   ├── src/                          # React source files
+│   ├── .env                          # Frontend environment variables
 │   ├── vite.config.js
 │   └── package.json
 │
-├── server/                # Backend (Express + MongoDB)
-│   ├── models/            # Mongoose models
-│   ├── routes/            # Express routes
+├── server/                           # Backend (Express + MongoDB)
+│   ├── models/                       # Mongoose models
+│   ├── routes/                       # Express routes
 │   │   ├── authRoutes.js
 │   │   ├── courseRoutes.js
-│   │   ├── uploadRoutes.js
-│   ├── utils/             # Helper functions
-│   ├── .env               # Backend environment variables
-│   ├── server.js          # Entry point
+│   │   └── uploadRoutes.js
+│   ├── utils/                        # Helper functions
+│   ├── .env                          # Backend environment variables
+│   ├── server.js                     # Entry point
 │   └── package.json
 │
 └── README.md
+```
 
-⚙️ Setup Instructions
-1️⃣ Clone the Repository
-git clone https://github.com/chaitanya-3006/EduNexus.git
+---
+
+## 🚀 Installation
+
+Instructions for installing and running EduNexus locally.
+
+```bash
+# Clone the repository
+git clone https://github.com/chaitanya-g-3006/EduNexus.git
 cd EduNexus
+```
 
-2️⃣ Setup Backend
+---
+
+## ⚡ Backend Setup
+
+```bash
 cd server
 npm install
+npm run dev
+```
 
-Create a .env file inside /server with the following:
+Your backend should now be running on `http://localhost:5000` (or your specified PORT).
+
+---
+
+## 💻 Frontend Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The frontend should now be available at `http://localhost:5173`.
+
+---
+
+## 🔑 Environment Variables
+
+Create `.env` files in both **client** and **server** directories.
+
+### 🧩 Server (.env)
+```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_jwt_secret
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
+```
 
+### 💡 Client (.env)
+```env
+VITE_API_URL=https://your-backend-url.onrender.com
+```
 
-Start the backend:
+---
 
-npm run dev
+## 🧪 Demo Credentials
 
+You can use the following test accounts to explore EduNexus:
 
-or for production:
+| Role | Email | Password |
+|------|--------|-----------|
+| 🧑‍🎓 **Student** | student01@edunexus.com | student123 |
+| 👨‍🏫 **Teacher** | teach01@edunexus.com | teach123 |
+| 🧑‍💼 **Admin** | admin01@edunexus.com | admin123 |
 
-npm start
+---
 
-3️⃣ Setup Frontend
-cd ../client
-npm install
+## 🧩 Tech Stack
 
-Create a .env file inside /client:
-VITE_API_URL=https://your-backend-deployed-url.onrender.com
+### 🖥️ Frontend
+- React (Vite)
+- TailwindCSS
+- Axios
+- React Router DOM
+- Lucide React (icons)
 
+### ⚙️ Backend
+- Node.js
+- Express.js
+- MongoDB & Mongoose
+- Multer (File Uploads)
+- Cloudinary
+- bcrypt
+- JWT Authentication
 
-Run the frontend:
+---
 
-npm run dev
+## 🌍 Deployment
 
-4️⃣ Build for Production
-npm run build
+- **Frontend:** [Vercel](https://vercel.com)  
+  Ensure `_redirects` file exists inside `public/` for proper routing.  
+  Example `_redirects` file:
+  ```
+  /*    /index.html   200
+  ```
 
+- **Backend:** [Render](https://render.com)  
+  Use `server.js` as the entry point.  
+  Set your environment variables under the **Environment** section.
 
-You can then deploy the /client/dist folder on Vercel or Netlify.
-Backend can be deployed on Render, Railway, or Vercel Functions.
+---
 
-🌐 Deployment Setup
-Frontend (Vercel)
+## 🧠 Author
 
-Root directory → client
-
-Build command → npm run build
-
-Output directory → dist
-
-Add _redirects file in client/public containing:
-
-/*    /index.html   200
-
-
-Add environment variable VITE_API_URL = your backend URL
-
-Backend (Render)
-
-Root directory → server
-
-Start command → npm start
-
-Environment variables → as per your .env file
-
-🧑‍💻 Scripts
-Frontend
-Command	Description
-npm run dev	Starts the Vite development server
-npm run build	Builds for production
-npm run preview	Previews the production build
-Backend
-Command	Description
-npm run dev	Starts server with nodemon
-npm start	Starts server in production mode
-🧠 Features
-
-✅ Authentication (Register/Login)
-✅ Role-based Access (Teacher / Student)
-✅ Course and Assignment Management
-✅ File Upload with Cloudinary
-✅ MongoDB Integration
-✅ Responsive UI with TailwindCSS
-
-
-🧪 Demo Credentials
-
-You can use the following demo accounts to test the EduNexus platform:
-
-👨‍🎓 Student
-
-Email: stud01@edunexus.com
-
-Password: stud123
-
-👩‍🏫 Teacher
-
-Email: teach01@edunexus.com
-
-Password: teach123
-
-👨‍🎓 Admin
-
-Email: admin02@edunexus.com
-
-Password: ad123
-
-
-🤝 Contributing
-
-Fork the repository
-
-Create your branch (git checkout -b feature/new-feature)
-
-Commit changes (git commit -m "Add new feature")
-
-Push to branch (git push origin feature/new-feature)
-
-Open a Pull Request
-
-🧾 License
-
-This project is licensed under the MIT License.
+**Developed by:** [Chaitanya G](https://github.com/chaitanya-g-3006)
