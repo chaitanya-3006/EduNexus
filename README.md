@@ -141,29 +141,28 @@ npm start	Starts server in production mode
 ✅ MongoDB Integration
 ✅ Responsive UI with TailwindCSS
 
+
 🧪 Demo Credentials
 
-Use the following demo accounts to explore the EduNexus platform:
-[
-  {
-    "email": "teach01@edunexus.com",
-    "password": "teach123",
-    "name": "Ananya Rao",
-    "role": "teacher"
-  },
-  {
-    "email": "stud01@edunexus.com",
-    "password": "stud123",
-    "name": "Rohit Verma",
-    "role": "student"
-  },
-  {
-    "email": "admin02@edunexus.com",
-    "password": "ad123",
-    "name": "Sneha Iyer",
-    "role": "admin"
-  }
-]
+You can use the following demo accounts to test the EduNexus platform:
+
+👨‍🎓 Student
+
+Email: stud01@edunexus.com
+
+Password: stud123
+
+👩‍🏫 Teacher
+
+Email: teach01@edunexus.com
+
+Password: teach123
+
+👨‍🎓 Admin
+
+Email: admin02@edunexus.com
+
+Password: ad123
 
 
 🤝 Contributing
