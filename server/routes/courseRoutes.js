@@ -229,7 +229,7 @@ router.delete("/submissions/:submission_id", getAuthUser, async (req, res) => {
     const user = req.currentUser;
 
     // Find submission by custom UUID id
-    const submission = await Submission.findOne({ id: submission_id });
+    const submission = await Submission.findOne({ id: submission_id }).lean();
     
     if (!submission) {
       return res.status(404).json({ detail: "Submission not found" });
