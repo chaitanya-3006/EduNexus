@@ -1,31 +1,34 @@
 // routes/uploadRoutes.js
 
-import express from 'express';
-import { v2 as cloudinary } from 'cloudinary';
-import multer from 'multer';
+import express from "express";
+import { v2 as cloudinary } from "cloudinary";
+import multer from "multer";
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() }); // store file in memory
+const upload = multer({ storage: multer.memoryStorage() });
 
-router.post("/", upload.single('file'), async (req, res) => {
+router.post("/", upload.single("file"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ detail: "No file uploaded" });
   }
 
   try {
-    // Detect the resource type automatically based on MIME type
-    let resourceType = 'auto';
-    if (req.file.mimetype === 'application/pdf') {
-      resourceType = 'raw'; // Force PDFs to upload as raw files
+    let resourceType = "auto";
+
+    // Force PDFs and other docs to use 'raw'
+    if (
+      req.file.mimetype === "application/pdf" ||
+      req.file.mimetype.includes("msword") ||
+      req.file.mimetype.includes("officedocument")
+    ) {
+      resourceType = "raw";
     }
 
-    // Convert file buffer to Base64 Data URI
-    const dataUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+    const dataUri = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
 
-    // Upload to Cloudinary
     const result = await cloudinary.uploader.upload(dataUri, {
       resource_type: resourceType,
-      folder: 'uploads', // optional folder name
+      folder: "uploads", // optional
     });
 
     res.json({ url: result.secure_url });
