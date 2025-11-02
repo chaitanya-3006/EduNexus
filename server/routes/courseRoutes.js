@@ -229,10 +229,6 @@ router.delete("/submissions/:id", getAuthUser, async (req, res) => {
 
     // Find submission
     let submission = await Submission.findOne({ id });
-    if (!submission && id.match(/^[0-9a-fA-F]{24}$/)) {
-      submission = await Submission.findById(id);
-    }
-
     if (!submission) {
       return res.status(404).json({ detail: "Submission not found" });
     }
@@ -247,13 +243,8 @@ router.delete("/submissions/:id", getAuthUser, async (req, res) => {
     }
 
     // Delete using the same method you found it
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      await Submission.findByIdAndDelete(id);
-    } else {
       await Submission.deleteOne({ id });
-    }
-
-    res.json({ message: "Submission deleted successfully" });
+      res.json({ message: "Submission deleted successfully" });
   } catch (error) {
     console.error("Delete submission error:", error);
     res.status(500).json({ detail: "Failed to delete submission" });
