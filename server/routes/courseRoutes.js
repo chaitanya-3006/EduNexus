@@ -227,7 +227,7 @@ router.delete("/submissions/:id", getAuthUser, async (req, res) => {
     const { id } = req.params;
     const user = req.currentUser;
 
-    // Try finding submission by custom id (UUID) or Mongo _id
+    // Find submission
     let submission = await Submission.findOne({ id });
     if (!submission && id.match(/^[0-9a-fA-F]{24}$/)) {
       submission = await Submission.findById(id);
@@ -237,7 +237,7 @@ router.delete("/submissions/:id", getAuthUser, async (req, res) => {
       return res.status(404).json({ detail: "Submission not found" });
     }
 
-    // Only instructors, admins, or the student who submitted can delete
+    // Authorization check
     if (
       user.role !== "instructor" &&
       user.role !== "admin" &&
@@ -246,8 +246,12 @@ router.delete("/submissions/:id", getAuthUser, async (req, res) => {
       return res.status(403).json({ detail: "Not authorized to delete this submission" });
     }
 
-    // Delete by _id to ensure removal even if it was found by custom id
-    await Submission.findByIdAndDelete(submission._id);
+    // Delete using the same method you found it
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      await Submission.findByIdAndDelete(id);
+    } else {
+      await Submission.deleteOne({ id });
+    }
 
     res.json({ message: "Submission deleted successfully" });
   } catch (error) {
