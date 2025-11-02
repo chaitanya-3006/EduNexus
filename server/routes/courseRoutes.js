@@ -222,6 +222,29 @@ router.post("/assignments/:assignment_id/submit", getAuthUser, async (req, res) 
   }
 });
 // ========================= UPDATE SUBMISSION =========================
+router.delete("/submissions/:id", getAuthUser, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = req.currentUser;
+
+    const submission = await Submission.findOne({ id });
+    if (!submission) {
+      return res.status(404).json({ detail: "Submission not found" });
+    }
+
+    // Only instructors, admins, or the student who submitted can delete
+    if (user.role !== "instructor" && user.role !== "admin" && user.id !== submission.student_id) {
+      return res.status(403).json({ detail: "Not authorized to delete this submission" });
+    }
+
+    await Submission.deleteOne({ id });
+    res.json({ message: "Submission deleted successfully" });
+  } catch (error) {
+    console.error("Delete submission error:", error);
+    res.status(500).json({ detail: "Failed to delete submission" });
+  }
+});
+
 router.put("/assignments/:assignment_id/submit", getAuthUser, async (req, res) => {
   try {
     const { assignment_id } = req.params;
