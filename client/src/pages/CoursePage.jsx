@@ -23,6 +23,9 @@ function CoursePage() {
   const [currentVideo, setCurrentVideo] = useState(null);
   const [messageText, setMessageText] = useState('');
   const [isInstructor, setIsInstructor] = useState(false);
+  const [expandedAssignmentId, setExpandedAssignmentId] = useState(null);
+const [submissions, setSubmissions] = useState({});
+
   
   // Modals
   const [showAddLecture, setShowAddLecture] = useState(false);
@@ -158,14 +161,14 @@ const handleSubmitAssignment = async () => {
   }
 
   try {
-    const method = selectedAssignment.submitted ? 'put' : 'post';
+const method = selectedAssignment.isSubmitted ? 'put' : 'post';
     await axios[method](
       `${API}/assignments/${selectedAssignment.id}/submit`,
       { file_url: submissionUrl }
     );
 
     toast.success(
-      selectedAssignment.submitted ? 'Submission updated!' : 'Assignment submitted!'
+      selectedAssignment.isSubmitted ? 'Submission updated!' : 'Assignment submitted!'
     );
     setShowSubmitAssignment(false);
     setSubmissionUrl('');
@@ -173,6 +176,19 @@ const handleSubmitAssignment = async () => {
     fetchAssignments(); // refresh to mark submitted=true
   } catch (error) {
     toast.error('Submission failed');
+  }
+};
+
+const handleDeleteSubmission = async (submissionId, assignmentId) => {
+  if (!window.confirm("Are you sure you want to delete this submission?")) return;
+
+  try {
+    await axios.delete(`${API}/submissions/${submissionId}`);
+    toast.success("Submission deleted");
+    fetchSubmissions(assignmentId); // refresh the submissions list
+  } catch (error) {
+    console.error("Delete submission error:", error);
+    toast.error("Failed to delete submission");
   }
 };
 
@@ -219,6 +235,24 @@ const handleSendMessage = async (e) => {
     toast.error('Failed to send message');
   }
 };
+const fetchSubmissions = async (assignmentId) => {
+  try {
+    const response = await axios.get(`${API}/submissions/${assignmentId}`);
+    setSubmissions((prev) => ({ ...prev, [assignmentId]: response.data }));
+  } catch (error) {
+    toast.error('Failed to load submissions');
+  }
+};
+
+const toggleAssignmentDropdown = (assignmentId) => {
+  if (expandedAssignmentId === assignmentId) {
+    setExpandedAssignmentId(null);
+  } else {
+    setExpandedAssignmentId(assignmentId);
+    fetchSubmissions(assignmentId);
+  }
+};
+
 
   if (!course) {
     return (
@@ -339,40 +373,36 @@ const handleSendMessage = async (e) => {
     </button>
   )}
 
-  {/*  Assignments List */}
-  <div className="space-y-4" data-testid="assignments-list">
-    {assignments.map((assignment) => (
+<div className="space-y-4" data-testid="assignments-list">
+  {assignments.map((assignment) => (
+    <div key={assignment.id} className="glass-effect rounded-xl p-5">
       <div
-        key={assignment.id}
-        className="glass-effect rounded-xl p-5 flex justify-between items-start"
-        data-testid={`assignment-item-${assignment.id}`}
+        className="flex justify-between items-start cursor-pointer"
+        onClick={() => toggleAssignmentDropdown(assignment.id)}
       >
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">{assignment.title}</h3>
           <p className="text-gray-600 mb-2">{assignment.description}</p>
           <p className="text-sm text-gray-500 mb-3">Due: {assignment.due_date}</p>
 
-          {/*  Student Submit Button */}
-{user.role === 'student' && (
-  <button
-    onClick={() => {
-      setSelectedAssignment(assignment);
-      setShowSubmitAssignment(true);
-    }}
-    className={`px-4 py-2 rounded-lg text-white ${
-      assignment.isSubmitted
-        ? 'bg-green-600 hover:bg-green-700'
-        : 'bg-sky-600 hover:bg-sky-700'
-    }`}
-  >
-    {assignment.isSubmitted ? 'Update Submission' : 'Submit Assignment'}
-  </button>
-)}
-
-
+          {user.role === 'student' && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedAssignment(assignment);
+                setShowSubmitAssignment(true);
+              }}
+              className={`px-4 py-2 rounded-lg text-white ${
+                assignment.isSubmitted
+                  ? 'bg-green-600 hover:bg-green-700'
+                  : 'bg-sky-600 hover:bg-sky-700'
+              }`}
+            >
+              {assignment.isSubmitted ? 'Update Submission' : 'Submit Assignment'}
+            </button>
+          )}
         </div>
 
-        {/*  Instructor Delete Button */}
         {isInstructor && (
           <button
             data-testid={`delete-assignment-btn-${assignment.id}`}
@@ -387,8 +417,62 @@ const handleSendMessage = async (e) => {
           </button>
         )}
       </div>
-    ))}
-  </div>
+
+      {/* Dropdown section */}
+      {expandedAssignmentId === assignment.id && isInstructor && (
+        <div className="mt-4 border-t border-gray-200 pt-3">
+          <h4 className="font-semibold text-gray-800 mb-2">Student Submissions</h4>
+          {submissions[assignment.id] ? (
+            submissions[assignment.id].length > 0 ? (
+              <ul className="space-y-2">
+                {submissions[assignment.id].map((sub) => (
+  <li
+    key={sub.id}
+    className="flex justify-between items-center bg-gray-50 p-2 rounded-lg"
+  >
+    <div>
+      <strong>{sub.student_name}</strong>{" "}
+      <span className="text-gray-500 text-sm">
+        ({new Date(sub.submitted_at).toLocaleString()})
+      </span>
+    </div>
+
+    <div className="flex items-center space-x-3">
+      <a
+        href={sub.file_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sky-600 hover:underline"
+      >
+        View File
+      </a>
+
+      {(user.role === "instructor" || user.role === "admin") && (
+        <button
+          onClick={() => handleDeleteSubmission(sub.id, assignment.id)}
+          className="text-red-500 hover:bg-red-100 p-1 rounded"
+          title="Delete Submission"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      )}
+    </div>
+  </li>
+))}
+
+              </ul>
+            ) : (
+              <p className="text-gray-500 text-sm">No submissions yet</p>
+            )
+          ) : (
+            <p className="text-gray-400 text-sm italic">Loading...</p>
+          )}
+        </div>
+      )}
+    </div>
+  ))}
+</div>
+
 </TabsContent>
 
 
@@ -584,3 +668,4 @@ const handleSendMessage = async (e) => {
 }
 
 export default CoursePage;
+
